@@ -29,10 +29,12 @@ terraform {
 
 provider "google" {
   project = "${var.project_id}"
+  credentials = "${var.credentials_path}"
 }
 
 provider "google-beta" {
   project = "${var.project_id}"
+  credentials = "${var.credentials_path}"
 }
 
 provider "helm" {
@@ -149,6 +151,7 @@ resource "google_sql_database_instance" "gitlab_db" {
   depends_on       = ["google_service_networking_connection.private_vpc_connection"]
   name             = "gitlab-db"
   region           = "${var.region}"
+  project          = "${var.project_id}"
   database_version = "POSTGRES_9_6"
 
   settings {
@@ -399,7 +402,7 @@ data "helm_repository" "gitlab" {
 data "google_compute_address" "gitlab" {
   name   = "${var.gitlab_address_name}"
   region = "${var.region}"
-
+  project = "${var.project_id}"
   # Do not get data if the address is being created as part of the run
   count = "${var.gitlab_address_name}" == "" ? 0 : 1
 }

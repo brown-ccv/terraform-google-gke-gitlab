@@ -20,7 +20,7 @@ output "gitlab_address" {
 }
 
 output "gitlab_url" {
-  value       = "https://gitlab.${google_compute_address.gitlab.0.address}.xip.io"
+  value       = "${var.domain}" != "" ? "https://gitlab.${var.domain}" : "https://gitlab.${google_compute_address.gitlab.0.address}.xip.io"
   description = "URL where you can access your GitLab instance"
 }
 
